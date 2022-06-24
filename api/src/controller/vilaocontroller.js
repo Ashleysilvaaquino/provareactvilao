@@ -1,35 +1,33 @@
-import { listarvilao, vilao } from '../repository/animerepository.js';
+import { adicionarVilao, listarViloes } from '../repository/vilaoRepository.js'
 
-import {Router} from 'express'
+import { Router } from 'express'
 const server = Router();
 
-server.post('/vilao/nome', async (req,resp) => {
+server.post('/vilao', async (req, resp) => {
     try {
-        const {nome} = req.body
-        const x = await listarvilao(nome);
-        resp.send({
-            resposta:x
-        })
-       
-    } 
-    catch (err) {
+        const inserirNovoVilao = req.body;
+
+        const novoVilao = await adicionarVilao(inserirNovoVilao);
+
+        resp.send(novoVilao)
+
+    } catch (err) {
         resp.status(400).send({
-           erro : err.message
-        });
+            erro:err.message
+        })
     }
 })
 
-server.get('/vilao', async (req,resp) => {
+server.get('/vilao', async (req, resp) =>{
     try {
-        const x = await vilao();
-        resp.send(x);   
-    } 
-    catch (err){
-        resp.status(404).send({ 
-            erro : err.message
-       });
+        const r = await listarViloes();
+        resp.send(r);
+    } catch (err) {
+        resp.status(400).send({
+            erro:err.message
+        })
     }
-      
 })
+
 
 export default server;

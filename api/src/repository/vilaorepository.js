@@ -1,25 +1,24 @@
-import { con } from './connection.js'
+import { con } from "./connection.js";
 
-export async function listarvilao(nome){
-    const comando = 
-    `insert into tb_vilao(nm_vilao , ds_maldades, bt_super_poder)
-     values(? , ? , ?);`
+export async function adicionarVilao(vilao){
+    const com = `
+    insert into tb_vilao(id_vilao, nm_vilao, ds_maldade, ds_poder)
+	            values(?, ?, ?, ?)`
+    const [contar] = await con.query(com, [vilao.vilao, vilao.nome, vilao.maldade, vilao.poder ]);
+    vilao.id = contar.insertId;
 
-    const [heroi] = await con.query(comando, [nome.nome])
-    return heroi.affectedRows;
+    return vilao;
+
 }
 
-export async function vilao(viloes)
-{
-    const comando = 
-    `select  ID_VILAO,
-    NM_ANIME	 nome,
-    DS_MALDADES  maldade,
-    BT_SUPER_PODER  poder
-    from  TB_VILAO`
-     
-    const [viloes] = await con.query(comando)
-    return viloes;
+export async function listarViloes(){
+    const com = 
+    `
+    select id_vilao	id,
+	       nm_vilao nome,
+           ds_maldade maldade,
+           ds_poder poder
+    from tb_vilao`;
+    const [contar] = await con.query(com);
+    return contar;
 }
-
-
